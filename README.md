@@ -137,6 +137,35 @@ exec zsh
 tmux source-file "$HOME/.tmux.conf"
 ```
 
+## 5. Install the VS Code theme
+
+The Nyx VS Code extension lives with the canonical palette in
+[`stfolder/nyx`](https://github.com/stfolder/nyx/tree/main/themes/nyx/vscode).
+It is deliberately separate from machine-specific editor settings. Install
+[Node.js](https://nodejs.org/), npm, and the VS Code `code` command, then run:
+
+```sh
+git clone https://github.com/stfolder/nyx.git "$HOME/nyx"
+cd "$HOME/nyx/themes/nyx/vscode"
+npm ci
+npm run install:local
+```
+
+Open **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS,
+`Ctrl+K Ctrl+T` on Linux) and choose **Nyx**. To select it explicitly in a
+sanitized VS Code profile:
+
+```json
+{
+  "workbench.colorTheme": "Nyx",
+  "workbench.preferredDarkColorTheme": "Nyx"
+}
+```
+
+On a work machine, install the theme package or import only the sanitized
+profile. Keep company extensions, credentials, repository settings, and other
+work configuration outside the personal repositories and Settings Sync.
+
 ## Theme and workflow behavior
 
 - Kitty opens or attaches to the tmux session named `base`. Detaching from tmux
@@ -198,6 +227,15 @@ exec zsh
 
 Restart Kitty after changes to its configuration. Existing tmux sessions can
 reload with `prefix` + <kbd>r</kbd>.
+
+Update and reinstall the VS Code theme separately:
+
+```sh
+git -C "$HOME/nyx" pull --ff-only
+cd "$HOME/nyx/themes/nyx/vscode"
+npm ci
+npm run install:local
+```
 
 ## Remove the symlinks
 
