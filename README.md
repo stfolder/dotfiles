@@ -139,16 +139,13 @@ tmux source-file "$HOME/.tmux.conf"
 
 ## 5. Install the VS Code theme
 
-The Nyx VS Code extension lives with the canonical palette in
-[`stfolder/nyx`](https://github.com/stfolder/nyx/tree/main/themes/nyx/vscode).
-It is deliberately separate from machine-specific editor settings. Install
-[Node.js](https://nodejs.org/), npm, and the VS Code `code` command, then run:
+The public, self-contained Nyx VS Code extension is included under
+[`vscode-theme/nyx`](vscode-theme/nyx). It is deliberately separate from
+machine-specific editor settings and does not require access to the private Nyx
+repository, Node.js, npm, or the VS Code Marketplace:
 
 ```sh
-git clone https://github.com/stfolder/nyx.git "$HOME/nyx"
-cd "$HOME/nyx/themes/nyx/vscode"
-npm ci
-npm run install:local
+code --install-extension "$HOME/dotfiles/vscode-theme/nyx/nyx-theme.vsix" --force
 ```
 
 Open **Preferences: Color Theme** (`Cmd+K Cmd+T` on macOS,
@@ -228,13 +225,10 @@ exec zsh
 Restart Kitty after changes to its configuration. Existing tmux sessions can
 reload with `prefix` + <kbd>r</kbd>.
 
-Update and reinstall the VS Code theme separately:
+Reinstall the bundled VS Code theme after updating dotfiles:
 
 ```sh
-git -C "$HOME/nyx" pull --ff-only
-cd "$HOME/nyx/themes/nyx/vscode"
-npm ci
-npm run install:local
+code --install-extension "$HOME/dotfiles/vscode-theme/nyx/nyx-theme.vsix" --force
 ```
 
 ## Remove the symlinks

@@ -1,0 +1,36 @@
+{
+  "name": "nyx-theme",
+  "displayName": "Nyx Theme",
+  "description": "A calm dark-indigo VS Code theme with silver-lavender text and controlled violet focus.",
+  "version": "0.1.0",
+  "publisher": "stfolder",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "nyx",
+    "dark",
+    "indigo",
+    "violet",
+    "theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stfolder/dotfiles.git",
+    "directory": "vscode-theme/nyx"
+  },
+  "contributes": {
+    "themes": [
+      {
+        "label": "Nyx",
+        "uiTheme": "vs-dark",
+        "path": "./themes/nyx-color-theme.json"
+      }
+    ]
+  }
+}
