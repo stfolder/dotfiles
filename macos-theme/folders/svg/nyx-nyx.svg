@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs><linearGradient id="folder" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4A4167"/><stop offset="1" stop-color="#28243A"/></linearGradient></defs>
+  <path d="M112 278c0-40 32-72 72-72h238l82 82h336c40 0 72 32 72 72v408c0 44-36 80-80 80H192c-44 0-80-36-80-80V278z" fill="url(#folder)"/>
+  <path d="M112 360h800v408c0 44-36 80-80 80H192c-44 0-80-36-80-80V360z" fill="#37304F"/>
+  <path d="M735 707c-46 65-121 103-202 103-137 0-248-111-248-248 0-119 85-222 202-244-36 48-55 106-55 166 0 153 124 277 277 277 37 0 73-7 106-21-24 8-51 12-80 12z" fill="#A9A0FF"/>
+</svg>

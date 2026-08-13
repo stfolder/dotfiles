@@ -1,8 +1,9 @@
 # Nyx terminal dotfiles
 
-A portable, dark terminal setup for macOS and Linux. Kitty provides the local
-terminal, tmux keeps the same session and pane workflow locally and over SSH,
-and the Nyx palette ties Kitty, tmux, Oh My Zsh, and eza together.
+A portable, dark workstation setup for macOS and Linux. Kitty provides the
+local terminal, tmux keeps the same session and pane workflow locally and over
+SSH, and the Nyx palette ties the terminal, shell, VS Code, and macOS visual
+assets together.
 
 The canonical palette and design rules live in
 [`stfolder/nyx`](https://github.com/stfolder/nyx). This repository contains the
@@ -17,6 +18,12 @@ ready-to-install terminal themes and configuration.
 | `omz` | `~/.oh-my-zsh/custom` | Nyx prompt and eza color integration |
 | `eza` | `~/.config/eza` | Nyx file-type and metadata colors |
 | `zsh` | `~/.zshrc` | Active Oh My Zsh setup and guarded optional tools |
+
+The repository also includes two self-contained, non-Stow asset packs:
+
+- [`vscode-theme/nyx`](vscode-theme/nyx) — installable Nyx colour theme VSIX.
+- [`macos-theme`](macos-theme) — Nyx wallpaper, folder icons, and native macOS
+  appearance instructions.
 
 GNU Stow creates symlinks from these package directories into your home
 directory. The repository remains the source of truth, so updates stay easy to
@@ -162,6 +169,34 @@ sanitized VS Code profile:
 On a work machine, install the theme package or import only the sanitized
 profile. Keep company extensions, credentials, repository settings, and other
 work configuration outside the personal repositories and Settings Sync.
+
+## 6. Apply the macOS theme
+
+The public [`macos-theme`](macos-theme) pack includes four dark wallpaper
+families in 16:10 and 3:2 crops, six transparent folder icons with SVG masters,
+and conservative native appearance recommendations. It does not patch system
+files or contain machine-specific settings.
+
+Start with [`macos-theme/README.md`](macos-theme/README.md). The shortest setup
+is:
+
+1. Set **System Settings → Appearance → Dark** with the Purple accent and Nyx
+   Violet highlight.
+2. On macOS Tahoe, choose **Liquid Glass → Tinted** and
+   **Icon & widget style → Dark → Always**.
+3. Select `macos-theme/wallpapers/nyx-samurai-still-16x10.png` for focused work,
+   or `nyx-veil-16x10.png` for the quieter everyday default.
+4. Apply only the meaningful folder PNGs through Finder's **Get Info** window.
+
+An optional, inspectable helper applies the safe appearance preferences:
+
+```sh
+sh "$HOME/dotfiles/macos-theme/settings/nyx-macos-settings.sh"
+```
+
+Review it before use, especially on a managed work Mac. It deliberately leaves
+wallpaper, icons, accessibility settings, security settings, and Dock contents
+alone.
 
 ## Theme and workflow behavior
 
