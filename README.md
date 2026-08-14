@@ -2,8 +2,8 @@
 
 A portable, dark workstation setup for macOS and Linux. Kitty provides the
 local terminal, tmux keeps the same session and pane workflow locally and over
-SSH, and the Nyx palette ties the terminal, shell, VS Code, and macOS visual
-assets together.
+SSH, and the Nyx palette ties the terminal, shell, VS Code, IntelliJ IDEA, and
+macOS visual assets together.
 
 The canonical palette and design rules live in
 [`stfolder/nyx`](https://github.com/stfolder/nyx). This repository contains the
@@ -19,9 +19,11 @@ ready-to-install terminal themes and configuration.
 | `eza` | `~/.config/eza` | Nyx file-type and metadata colors |
 | `zsh` | `~/.zshrc` | Active Oh My Zsh setup and guarded optional tools |
 
-The repository also includes two self-contained, non-Stow asset packs:
+The repository also includes three self-contained, non-Stow asset packs:
 
 - [`vscode-theme/nyx`](vscode-theme/nyx) — installable Nyx colour theme VSIX.
+- [`intellij-theme/nyx`](intellij-theme/nyx) — installable Nyx IntelliJ theme
+  plugin with VS Code-aligned syntax semantics.
 - [`macos-theme`](macos-theme) — Nyx wallpaper, folder icons, and native macOS
   appearance instructions.
 
@@ -170,7 +172,30 @@ On a work machine, install the theme package or import only the sanitized
 profile. Keep company extensions, credentials, repository settings, and other
 work configuration outside the personal repositories and Settings Sync.
 
-## 6. Apply the macOS theme
+## 6. Install the IntelliJ IDEA theme
+
+The public [`intellij-theme/nyx`](intellij-theme/nyx) bundle contains the Nyx
+application theme and editor color scheme in one self-contained plugin. Its
+syntax roles intentionally match the VS Code theme: pink keywords, blue
+functions, lavender types, green strings, yellow numbers, peach constants,
+cyan fields and keys, and violet annotations.
+
+Open **Settings → Plugins**, use the gear menu to choose
+**Install Plugin from Disk**, and select:
+
+```text
+~/dotfiles/intellij-theme/nyx/nyx-intellij-theme.jar
+```
+
+Restart IntelliJ IDEA when prompted, then choose **Nyx** under
+**Settings → Appearance & Behavior → Appearance**. The bundled Nyx editor
+scheme is selected with the UI theme; if a project retains another scheme,
+choose **Nyx** under **Settings → Editor → Color Scheme**.
+
+This installation is local and sanitized. Keep JetBrains Settings Sync off on
+a managed work Mac unless the organisation explicitly permits it.
+
+## 7. Apply the macOS theme
 
 The public [`macos-theme`](macos-theme) pack includes four dark wallpaper
 families in 16:10 and 3:2 crops, six transparent folder icons with SVG masters,
