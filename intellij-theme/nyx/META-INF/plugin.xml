@@ -1,0 +1,16 @@
+<idea-plugin>
+  <id>dev.nyx.jetbrains.theme</id>
+  <name>Nyx Theme</name>
+  <version>0.1.0</version>
+  <vendor url="https://github.com/stfolder">stfolder</vendor>
+  <description><![CDATA[
+    A dark-indigo IntelliJ Platform theme with silver-lavender text,
+    controlled violet focus, and syntax semantics aligned with Nyx for VS Code.
+  ]]></description>
+  <idea-version since-build="242"/>
+  <depends>com.intellij.modules.platform</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <themeProvider id="dev.nyx.jetbrains.theme.provider" path="/themes/nyx.theme.json"/>
+    <bundledColorScheme id="Nyx" path="/themes/nyx"/>
+  </extensions>
+</idea-plugin>

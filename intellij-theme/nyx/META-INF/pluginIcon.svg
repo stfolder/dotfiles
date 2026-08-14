@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <linearGradient id="nyxGlow" x1="8" y1="5" x2="32" y2="35" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B69CFF"/>
+      <stop offset="1" stop-color="#82AAFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="40" height="40" rx="9" fill="#12101C"/>
+  <path d="M28.8 8.2c-6.8 1.2-11.9 7.1-11.9 14.2 0 4.1 1.7 7.8 4.5 10.4C14.3 32.1 8.8 26.1 8.8 18.8 8.8 11 15.1 4.7 22.9 4.7c2.1 0 4.1.5 5.9 1.3v2.2Z" fill="url(#nyxGlow)"/>
+  <path d="M18.3 14.2h3.2l6.1 9.3v-9.3h3.1v14.9h-3.2l-6.1-9.2v9.2h-3.1V14.2Z" fill="#DAD6EB"/>
+</svg>
