@@ -9,7 +9,10 @@ hl.monitor({
     output = "",
     mode = "preferred",
     position = "auto",
-    scale = "auto",
+    -- Preserve native pixel density by default. Per-display overrides may
+    -- opt into scaling explicitly, but automatic scaling is deliberately
+    -- avoided because it made Umbra's 1080p panel unnecessarily coarse.
+    scale = 1,
 })
 
 hl.env("XCURSOR_SIZE", "24")
