@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Nyx for Brave",
+  "version": "0.1.0",
+  "description": "Dark indigo browser chrome with silver-lavender text and controlled Nyx accents.",
+  "theme": {
+    "colors": {
+      "frame": [18, 16, 28],
+      "frame_inactive": [13, 11, 20],
+      "frame_incognito": [13, 11, 20],
+      "frame_incognito_inactive": [13, 11, 20],
+
+      "toolbar": [29, 26, 43],
+      "toolbar_text": [218, 214, 235],
+      "toolbar_button_icon": [169, 160, 255],
+      "button_background": [40, 36, 58],
+
+      "omnibox_background": [23, 21, 34],
+      "omnibox_text": [218, 214, 235],
+      "bookmark_text": [170, 163, 191],
+
+      "background_tab": [40, 36, 58],
+      "background_tab_inactive": [23, 21, 34],
+      "background_tab_incognito": [23, 21, 34],
+      "background_tab_incognito_inactive": [18, 16, 28],
+      "tab_text": [182, 156, 255],
+      "tab_background_text": [170, 163, 191],
+      "tab_background_text_inactive": [129, 121, 156],
+      "tab_background_text_incognito": [170, 163, 191],
+      "tab_background_text_incognito_inactive": [129, 121, 156],
+
+      "ntp_background": [29, 26, 43],
+      "ntp_text": [218, 214, 235],
+      "ntp_link": [130, 170, 255],
+      "ntp_header": [129, 121, 156]
+    }
+  }
+}
