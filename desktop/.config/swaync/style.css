@@ -1,0 +1,105 @@
+@define-color void #0D0B14;
+@define-color crust #12101C;
+@define-color mantle #171522;
+@define-color base #1D1A2B;
+@define-color surface0 #28243A;
+@define-color surface1 #37304F;
+@define-color surface2 #4A4167;
+@define-color muted #81799C;
+@define-color subtext #AAA3BF;
+@define-color text #DAD6EB;
+@define-color violet #B69CFF;
+@define-color blue #82AAFF;
+@define-color red #F2778F;
+
+:root {
+  --notification-icon-size: 48px;
+  --notification-app-icon-size: 16px;
+  --notification-group-icon-size: 28px;
+  --font-size-body: 13px;
+  --font-size-summary: 13px;
+}
+
+* {
+  color: @text;
+  font-family: "Inter", "Noto Sans", sans-serif;
+  font-size: 13px;
+}
+
+.control-center {
+  background: alpha(@crust, 0.96);
+  border: 1px solid @surface2;
+  border-radius: 10px;
+  padding: 8px;
+}
+
+.notification-row {
+  outline: none;
+}
+
+.notification-row .notification-background .notification {
+  background: alpha(@base, 0.97);
+  border: 1px solid @surface2;
+  border-radius: 10px;
+  margin: 6px;
+  padding: 0;
+}
+
+.notification-row .notification-background .notification.critical {
+  border-color: @red;
+}
+
+.notification-content {
+  padding: 12px;
+}
+
+.summary {
+  color: @text;
+  font-weight: 600;
+}
+
+.body,
+.time {
+  color: @subtext;
+}
+
+.close-button {
+  color: @subtext;
+  background: @surface0;
+  border-radius: 8px;
+  margin: 6px;
+}
+
+.close-button:hover {
+  color: @void;
+  background: @red;
+}
+
+.widget-title {
+  color: @text;
+  margin: 6px 8px 10px;
+}
+
+.widget-title > button,
+.widget-dnd > switch {
+  color: @text;
+  background: @surface0;
+  border: 1px solid @surface2;
+  border-radius: 8px;
+}
+
+.widget-title > button:hover,
+.widget-dnd > switch:checked {
+  color: @void;
+  background: @violet;
+  border-color: @violet;
+}
+
+.widget-dnd {
+  color: @subtext;
+  margin: 4px 8px 10px;
+}
+
+.control-center-list-placeholder {
+  color: @muted;
+}

@@ -1,9 +1,9 @@
-# Nyx terminal dotfiles
+# Nyx dotfiles
 
-A portable, dark workstation setup for macOS and Linux. Kitty provides the
-local terminal, tmux keeps the same session and pane workflow locally and over
-SSH, and the Nyx palette ties the terminal, shell, VS Code, IntelliJ IDEA, and
-macOS visual assets together.
+A portable, dark workstation setup for macOS and Linux. On Arch, the `desktop`
+package provides a complete Wayland shell around Hyprland. Kitty and tmux keep
+the same terminal workflow locally and over SSH, while the Nyx palette ties the
+desktop, shell, editors, and macOS visual assets together.
 
 The canonical palette and design rules live in
 [`stfolder/nyx`](https://github.com/stfolder/nyx). This repository contains the
@@ -18,6 +18,7 @@ ready-to-install terminal themes and configuration.
 | `omz` | `~/.oh-my-zsh/custom` | Nyx prompt and eza color integration |
 | `eza` | `~/.config/eza` | Nyx file-type and metadata colors |
 | `zsh` | `~/.zshrc` | Active Oh My Zsh setup and guarded optional tools |
+| `desktop` | `~/.config/{hypr,waybar,swaync}`, `~/.local/bin` | Nyx Hyprland shell, bar, notifications, lock, idle, clipboard, and screenshots |
 
 The repository also includes three self-contained, non-Stow asset packs:
 
@@ -51,7 +52,7 @@ macOS already includes Zsh. If Homebrew is not available in a new terminal,
 add the `brew shellenv` line printed by the Homebrew installer to `~/.zprofile`.
 That file is intentionally machine-specific and is not managed here.
 
-### Linux
+### Linux terminal
 
 Install Git, Stow, Zsh, tmux, and eza with your distribution's package manager.
 Use a packaged Kitty build when it is current enough, or use Kitty's
@@ -64,6 +65,23 @@ curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 Install JetBrains Mono Nerd Font from your distribution, or download it from
 [Nerd Fonts](https://www.nerdfonts.com/font-downloads). Kitty must see the font
 as `JetBrainsMono Nerd Font`.
+
+### Arch Linux Wayland desktop
+
+Umbra installs and tests this set through its staged workflow. On another Arch
+Hyprland machine, install the shell dependencies directly:
+
+```sh
+sudo pacman -S --needed \
+  hyprland hyprlauncher hyprpaper hyprlock hypridle \
+  waybar swaync hyprpwcenter \
+  wl-clipboard cliphist grim slurp libnotify \
+  brightnessctl playerctl network-manager-applet blueman \
+  ttf-jetbrains-mono-nerd inter-font noto-fonts
+```
+
+The desktop deliberately uses packages from Arch's supported repositories. It
+does not require an AUR helper or a second package manager.
 
 ## 2. Install Oh My Zsh
 
@@ -108,8 +126,19 @@ Create the symlinks:
 stow --target="$HOME" kitty tmux omz eza zsh
 ```
 
-This links only the five packages above. Other packages in the repository are
-independent and are not required for the Nyx terminal setup.
+This links only the five terminal packages above. Other packages in the
+repository are independent and are not required for the Nyx terminal setup.
+
+On Umbra, remove or back up an existing bootstrap Hyprland configuration, then
+link the complete desktop as one reviewed unit:
+
+```sh
+cd ~/dotfiles
+stow --target="$HOME" desktop kitty tmux omz eza zsh
+```
+
+The desktop's architecture, shortcuts, idle behavior, and privacy trade-offs
+are documented in [`docs/nyx-desktop.md`](docs/nyx-desktop.md).
 
 ### Forge or another headless server
 

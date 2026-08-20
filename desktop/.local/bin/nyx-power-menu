@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+selection="$({
+    printf '%s\n' "  Lock"
+    printf '%s\n' "󰤄  Suspend"
+    printf '%s\n' "󰍃  Log out"
+    printf '%s\n' "󰜉  Reboot"
+    printf '%s\n' "󰐥  Power off"
+} | hyprlauncher --dmenu || true)"
+
+case "$selection" in
+    *"Lock") loginctl lock-session ;;
+    *"Suspend") loginctl lock-session && systemctl suspend ;;
+    *"Log out") hyprctl dispatch 'hl.dsp.exit()' ;;
+    *"Reboot") systemctl reboot ;;
+    *"Power off") systemctl poweroff ;;
+    ""|"Exited without selection") exit 0 ;;
+esac

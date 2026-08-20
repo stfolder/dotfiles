@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+selection="$(cliphist list | hyprlauncher --dmenu || true)"
+[[ -n "$selection" && "$selection" != "Exited without selection" ]] || exit 0
+
+printf '%s\n' "$selection" | cliphist decode | wl-copy
+notify-send --app-name=Nyx "Clipboard entry copied"

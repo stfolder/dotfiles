@@ -1,0 +1,145 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "spacing": 0,
+  "margin-top": 6,
+  "margin-left": 8,
+  "margin-right": 8,
+
+  "modules-left": [
+    "custom/launcher",
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+  "modules-center": ["clock"],
+  "modules-right": [
+    "idle_inhibitor",
+    "custom/notification",
+    "wireplumber",
+    "backlight",
+    "network",
+    "bluetooth",
+    "battery",
+    "tray",
+    "custom/power"
+  ],
+
+  "custom/launcher": {
+    "format": "󰣇",
+    "tooltip-format": "Applications  ·  Super+Space",
+    "on-click": "hyprlauncher --toggle"
+  },
+
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": false,
+    "format": "{name}",
+    "persistent-workspaces": {
+      "*": 5
+    }
+  },
+
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 48,
+    "separate-outputs": true,
+    "rewrite": {
+      "": "Umbra"
+    }
+  },
+
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:%a, %b %d  ·  %H:%M}",
+    "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰾪"
+    },
+    "tooltip-format-activated": "Idle inhibited",
+    "tooltip-format-deactivated": "Idle policy active"
+  },
+
+  "custom/notification": {
+    "return-type": "json",
+    "exec-if": "command -v swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "󱅫",
+      "none": "󰂚",
+      "dnd-notification": "󱏧",
+      "dnd-none": "󰂛",
+      "inhibited-notification": "󱅫",
+      "inhibited-none": "󰂚",
+      "dnd-inhibited-notification": "󱏧",
+      "dnd-inhibited-none": "󰂛"
+    }
+  },
+
+  "wireplumber": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 muted",
+    "format-icons": ["󰕿", "󰖀", "󰕾"],
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-right": "hyprpwcenter",
+    "scroll-step": 5
+  },
+
+  "backlight": {
+    "format": "󰃟 {percent}%",
+    "on-scroll-up": "brightnessctl -e4 -n2 set 5%+",
+    "on-scroll-down": "brightnessctl -e4 -n2 set 5%-"
+  },
+
+  "network": {
+    "format-wifi": "󰖩",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰖪",
+    "tooltip-format-wifi": "{essid}\nSignal {signalStrength}%  ·  {ipaddr}",
+    "tooltip-format-ethernet": "{ifname}  ·  {ipaddr}",
+    "tooltip-format-disconnected": "Network disconnected",
+    "on-click": "nm-connection-editor"
+  },
+
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": "Bluetooth {status}",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "on-click": "blueman-manager"
+  },
+
+  "battery": {
+    "states": {
+      "warning": 25,
+      "critical": 12
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰚥 {capacity}%",
+    "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰁹"],
+    "tooltip-format": "{timeTo}  ·  {power:.1f} W"
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+
+  "custom/power": {
+    "format": "󰐥",
+    "tooltip-format": "Session and power",
+    "on-click": "nyx-power-menu"
+  }
+}
