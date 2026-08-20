@@ -34,8 +34,20 @@ IntelliJ:
 - warnings and destructive actions: `yellow` and `red`
 
 The bar is compact and structural. Violet is reserved for the launcher and
-attention; blue identifies navigation. The lock screen uses the quiet Nyx Veil
-wallpaper rather than inventing a second visual identity.
+attention; blue identifies navigation. The desktop uses an illustrated Nyx
+workspace built around Umbra, while the lock screen uses a dedicated guardian
+composition with quiet central space for authentication. They share one visual
+identity without forcing one image to do two different jobs.
+
+## Display scaling policy
+
+Displays use their preferred mode at native `1:1` scale by default. Automatic
+scaling is intentionally disabled: it selected `1.5` on Umbra's 1920x1080
+panel, reducing usable space and making the image unnecessarily coarse.
+
+This is the default for every display matched by the fallback monitor rule.
+A display that genuinely needs scaling should receive an explicit per-output
+override rather than changing the global fallback back to `auto`.
 
 ## Keyboard vocabulary
 
@@ -80,9 +92,13 @@ rest. It is still readable by the logged-in user and their processes. Use
 `Super+Shift+V` after copying a secret, or disable the two `wl-paste` watchers
 in `hyprland.lua` if persistent clipboard history is undesirable.
 
-## Wallpaper path
+## Wallpaper paths
 
-Hyprpaper and hyprlock use
-`~/dotfiles/macos-theme/wallpapers/nyx-veil-16x10.png`. The shared asset avoids
-duplicating a multi-megabyte image, but it also means the canonical clone path
-for the complete workstation is `~/dotfiles`.
+Hyprpaper uses
+`~/dotfiles/macos-theme/wallpapers/nyx-umbra-workspace-16x9.png`.
+Hyprlock uses
+`~/dotfiles/macos-theme/wallpapers/nyx-umbra-guardian-16x9.png`.
+
+The guardian image deliberately leaves the center dark for the clock, date,
+password field, and user label. Both assets live in the canonical dotfiles
+clone, so the complete workstation expects that repository at `~/dotfiles`.
