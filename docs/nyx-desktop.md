@@ -39,6 +39,18 @@ workspace built around Umbra, while the lock screen uses a dedicated guardian
 composition with quiet central space for authentication. They share one visual
 identity without forcing one image to do two different jobs.
 
+## Dark appearance policy
+
+Umbra prefers dark application chrome at the GTK layer instead of carrying a
+Firefox-only override. GTK 3 selects `Adwaita-dark` and requests dark
+application chrome; GTK 4 requests the dark variant through its normal settings
+file. These settings are part of the Stow-managed `desktop` package.
+
+Firefox should remain on its **System theme**. It then follows the GTK theme for
+browser chrome and reports a dark system color scheme to sites that support
+`prefers-color-scheme`. This policy does not forcibly recolor websites that do
+not provide their own dark presentation.
+
 ## Display scaling policy
 
 Displays use their preferred mode at native `1:1` scale by default. Automatic
