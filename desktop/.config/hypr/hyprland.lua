@@ -17,10 +17,14 @@ hl.monitor({
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
+-- Make the desktop's dark appearance explicit in the process environment.
+-- Firefox's Linux System theme does not consistently honor GTK's prefer-dark
+-- flag alone, while an explicit -dark GTK theme name is reliably recognized.
+hl.env("GTK_THEME", "Adwaita-dark")
 
 hl.on("hyprland.start", function()
     -- Import the live Wayland environment before activating user services.
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start hyprpolkitagent xdg-desktop-portal.service")
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE GTK_THEME && systemctl --user start hyprpolkitagent xdg-desktop-portal.service")
 
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar")
