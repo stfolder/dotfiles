@@ -23,12 +23,18 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("GTK_THEME", "Adwaita:dark")
 
 hl.on("hyprland.start", function()
-    -- Import the live Wayland environment before activating user services.
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE GTK_THEME && systemctl --user start hyprpolkitagent xdg-desktop-portal.service")
+    -- User services survive compositor exits, so they may retain the old
+    -- WAYLAND_DISPLAY and hit systemd start limits while no compositor exists.
+    -- Keep recovery in one shell command: separate hl.exec_cmd calls are
+    -- asynchronous and can race each other during session startup.
+    --
+    -- SwayNC is systemd-owned. Kill one legacy directly-launched instance
+    -- during the ownership handoff before starting the service, then future
+    -- sessions simply restart the managed service against the fresh socket.
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE GTK_THEME && { systemctl --user stop swaync.service 2>/dev/null || true; pkill -x swaync 2>/dev/null || true; sleep 0.2; systemctl --user reset-failed hyprpolkitagent.service swaync.service 2>/dev/null || true; systemctl --user restart hyprpolkitagent.service && systemctl --user start swaync.service && systemctl --user restart xdg-desktop-portal-hyprland.service && systemctl --user restart xdg-desktop-portal.service; }")
 
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar")
-    hl.exec_cmd("swaync")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("hyprlauncher --daemon")
 
