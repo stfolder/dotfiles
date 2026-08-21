@@ -44,9 +44,7 @@ ZSH_THEME="nyx"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# You can also set it to another string using the prompt expansion syntax.
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -56,19 +54,14 @@ ZSH_THEME="nyx"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# Standard plugins can be found in $ZSH/plugins/.
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/.
 # Add wisely, as too many plugins slow down shell startup.
 
 HISTSIZE=999
@@ -127,10 +120,6 @@ export VISUAL="$EDITOR"
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 (( $+commands[nvim] )) && alias vi='nvim' vim='nvim'
 (( $+commands[python3] )) && alias python='python3'
 (( $+commands[eza] )) && alias ls='eza --icons'
@@ -139,6 +128,24 @@ alias proj="cd ~/Projects"
 alias work="cd ~/Work"
 (( $+commands[kubectl] )) && alias k='kubectl'
 (( $+commands[fzf] && $+commands[bat] )) && alias f="fzf --preview='bat --color=always {}'"
+
+# zoxide provides a learned `z` jump without replacing ordinary `cd`.
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+
+# Yazi remains available normally. `y` additionally returns the shell to the
+# directory selected when the file manager exits.
+if (( $+commands[yazi] )); then
+  y() {
+    local tmp cwd
+    tmp="$(mktemp -t 'yazi-cwd.XXXXXX')" || return
+    command yazi "$@" --cwd-file="$tmp"
+    cwd="$(command cat -- "$tmp" 2>/dev/null)"
+    rm -f -- "$tmp"
+    [[ -n "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
+  }
+fi
 
 # Home WireGuard shortcuts are available only where the tools are installed.
 if (( $+commands[wg-quick] && $+commands[wg] )); then
