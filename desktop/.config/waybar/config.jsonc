@@ -14,7 +14,7 @@
   ],
   "modules-center": ["clock"],
   "modules-right": [
-    "idle_inhibitor",
+    "inhibitor",
     "custom/notification",
     "wireplumber",
     "backlight",
@@ -55,14 +55,13 @@
     "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
   },
 
-  "idle_inhibitor": {
+  "inhibitor": {
+    "what": "idle",
     "format": "{icon}",
     "format-icons": {
       "activated": "󰅶",
       "deactivated": "󰾪"
-    },
-    "tooltip-format-activated": "Idle inhibited",
-    "tooltip-format-deactivated": "Idle policy active"
+    }
   },
 
   "custom/notification": {
