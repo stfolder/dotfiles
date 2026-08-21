@@ -23,12 +23,22 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("GTK_THEME", "Adwaita:dark")
 
 hl.on("hyprland.start", function()
-    -- Import the live Wayland environment before activating user services.
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE GTK_THEME && systemctl --user start hyprpolkitagent xdg-desktop-portal.service")
+    -- Advertise the live Wayland session to the user systemd manager before
+    -- activating graphical-session.target. The Hyprland-specific session
+    -- target gives Wayland-bound services a real lifetime boundary instead of
+    -- letting them restart against a compositor socket that has disappeared.
+    --
+    -- SwayNC used to be launched directly, so stop its service and terminate
+    -- one possible legacy process during the handoff. From this point onward
+    -- systemd is the only owner of the notification daemon.
+    --
+    -- XDPH is intentionally not started directly. Once graphical-session.target
+    -- is active, restarting the portal broker lets D-Bus activate the Hyprland
+    -- backend with the correct session environment and ordering.
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE GTK_THEME && { systemctl --user stop swaync.service 2>/dev/null || true; pkill -x swaync 2>/dev/null || true; systemctl --user reset-failed hyprpolkitagent.service swaync.service xdg-desktop-portal-hyprland.service 2>/dev/null || true; systemctl --user start hyprland-session.target && systemctl --user restart hyprpolkitagent.service && systemctl --user start swaync.service && systemctl --user restart xdg-desktop-portal.service; }")
 
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar")
-    hl.exec_cmd("swaync")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("hyprlauncher --daemon")
 
@@ -36,6 +46,13 @@ hl.on("hyprland.start", function()
     -- root protects the history at rest; Super+Shift+V wipes it on demand.
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
+end)
+
+hl.on("hyprland.shutdown", function()
+    -- Stop the graphical session before the compositor disappears so services
+    -- with PartOf=graphical-session.target cannot restart against a dead
+    -- Wayland socket during the TTY handoff.
+    os.execute("systemctl --user stop hyprland-session.target && sleep 0.1")
 end)
 
 hl.config({
