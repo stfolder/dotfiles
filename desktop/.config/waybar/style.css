@@ -47,7 +47,7 @@ tooltip label {
 #workspaces,
 #window,
 #clock,
-#idle_inhibitor,
+#inhibitor,
 #custom-notification,
 #wireplumber,
 #backlight,
@@ -107,7 +107,7 @@ tooltip label {
   padding: 0 14px;
 }
 
-#idle_inhibitor.activated {
+#inhibitor.activated {
   color: @yellow;
 }
 
@@ -159,7 +159,7 @@ tooltip label {
 }
 
 #custom-launcher:hover,
-#idle_inhibitor:hover,
+#inhibitor:hover,
 #custom-notification:hover,
 #wireplumber:hover,
 #backlight:hover,
