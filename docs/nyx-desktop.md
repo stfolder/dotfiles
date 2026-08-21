@@ -21,6 +21,28 @@ The former Rofi, swaylock, and Catppuccin Waybar files were removed because
 they represented an older X11/wlroots setup and a different visual system.
 Git history preserves them if they are ever useful as reference.
 
+## Session lifecycle
+
+Umbra starts Hyprland deliberately from a TTY instead of using a display
+manager, but the desktop still declares a real systemd graphical session.
+`~/.config/systemd/user/hyprland-session.target` binds the generic
+`graphical-session.target` for the lifetime of the compositor.
+
+On `hyprland.start`, the live Wayland environment is imported into the user
+systemd manager before `hyprland-session.target` is activated. Wayland-bound
+services such as the polkit agent, SwayNC, and XDG Desktop Portal then start
+inside a valid graphical-session lifetime. XDPH is D-Bus activated through the
+portal broker instead of being launched directly.
+
+On `hyprland.shutdown`, the Hyprland session target is stopped synchronously
+before the compositor exits. Services with `PartOf=graphical-session.target`
+therefore stop while the Wayland socket still exists instead of attempting to
+restart against a dead compositor during the handoff back to the TTY.
+
+SwayNC is systemd-owned. It must not also be launched directly from Hyprland,
+because two owners compete for the same notification D-Bus name and force the
+packaged service into `start-limit-hit`.
+
 ## Visual mapping
 
 The desktop reads the same semantic palette used by Kitty, VS Code, and
@@ -42,14 +64,15 @@ identity without forcing one image to do two different jobs.
 ## Dark appearance policy
 
 Umbra prefers dark application chrome at the GTK layer instead of carrying a
-Firefox-only override. GTK 3 selects `Adwaita-dark` and requests dark
-application chrome; GTK 4 requests the dark variant through its normal settings
-file. These settings are part of the Stow-managed `desktop` package.
+browser-only override. GTK 3 and GTK 4 use the built-in `Adwaita` theme while
+requesting dark application styling, and the Hyprland session exports
+`GTK_THEME=Adwaita:dark` for applications that need the explicit variant. These
+settings are part of the Stow-managed `desktop` package.
 
-Firefox should remain on its **System theme**. It then follows the GTK theme for
-browser chrome and reports a dark system color scheme to sites that support
-`prefers-color-scheme`. This policy does not forcibly recolor websites that do
-not provide their own dark presentation.
+Browsers may remain on their system theme so their chrome follows the desktop
+and sites that support `prefers-color-scheme` can observe a dark system color
+scheme. This policy does not forcibly recolor websites that do not provide
+their own dark presentation.
 
 ## Display scaling policy
 
