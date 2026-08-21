@@ -18,9 +18,9 @@ hl.monitor({
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 -- Make the desktop's dark appearance explicit in the process environment.
--- Firefox's Linux System theme does not consistently honor GTK's prefer-dark
--- flag alone, while an explicit -dark GTK theme name is reliably recognized.
-hl.env("GTK_THEME", "Adwaita-dark")
+-- Use GTK's built-in Adwaita dark variant syntax rather than the separate
+-- Adwaita-dark theme name, which may not exist on a minimal Arch install.
+hl.env("GTK_THEME", "Adwaita:dark")
 
 hl.on("hyprland.start", function()
     -- Import the live Wayland environment before activating user services.
