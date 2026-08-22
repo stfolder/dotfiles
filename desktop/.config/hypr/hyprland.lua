@@ -139,6 +139,7 @@ hl.gesture({
 -- Core shell.
 hl.bind(main_mod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(main_mod .. " + SPACE", hl.dsp.exec_cmd(launcher))
+hl.bind(main_mod .. " + period", hl.dsp.exec_cmd("rofimoji --selector fuzzel --action copy --clipboarder wl-copy"))
 hl.bind(main_mod .. " + V", hl.dsp.exec_cmd("nyx-clipboard-menu"))
 hl.bind(main_mod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist wipe && notify-send 'Clipboard history cleared'"))
 hl.bind(main_mod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
