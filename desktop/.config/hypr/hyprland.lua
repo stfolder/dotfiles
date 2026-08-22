@@ -139,6 +139,7 @@ hl.gesture({
 -- Core shell.
 hl.bind(main_mod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(main_mod .. " + SPACE", hl.dsp.exec_cmd(launcher))
+hl.bind(main_mod .. " + period", hl.dsp.exec_cmd("rofimoji --selector fuzzel --action copy --clipboarder wl-copy"))
 hl.bind(main_mod .. " + V", hl.dsp.exec_cmd("nyx-clipboard-menu"))
 hl.bind(main_mod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist wipe && notify-send 'Clipboard history cleared'"))
 hl.bind(main_mod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
@@ -176,9 +177,9 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
--- Screenshots are saved and copied, so they work in chats immediately.
+-- Print is the fast full-screen path; Shift+Print selects a region for annotation.
 hl.bind("PRINT", hl.dsp.exec_cmd("nyx-screenshot full"))
-hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd("nyx-screenshot area"))
+hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd("nyx-screenshot annotate"))
 
 hl.window_rule({
     name = "suppress-maximize-events",

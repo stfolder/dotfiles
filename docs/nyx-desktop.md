@@ -9,13 +9,14 @@ keeps the policy visible in ordinary configuration files.
 | Responsibility | Component | Why |
 | --- | --- | --- |
 | Display, input, windows, bindings | Hyprland native Lua | The compositor is the source of truth; Lua is the supported 0.56+ format |
-| Applications and small pickers | hyprlauncher | Native Hyprland toolkit, instant daemon mode, and a dmenu-compatible selection path |
+| Applications and small pickers | hyprlauncher | Native Hyprland toolkit and instant daemon mode for ordinary application launching |
+| Emoji picker | rofimoji + Fuzzel | Fuzzel renders the installed color emoji font correctly; rofimoji provides searchable emoji names and copies through `wl-copy` |
 | Status and controls | Waybar | Mature modules for workspaces, audio, network, Bluetooth, backlight, and battery |
 | Notifications | SwayNotificationCenter | Notifications plus a reviewable control center and do-not-disturb state |
 | Wallpaper | hyprpaper | Small native wallpaper process with Hyprland IPC |
 | Authentication and idle | hyprlock + hypridle | The lock is explicit; idle and suspend policy remain separate and inspectable |
 | Clipboard | wl-clipboard + cliphist | Wayland-native text and image history with a deliberate clear operation |
-| Screenshots | grim + slurp | One command for full output, one geometry selector for regions |
+| Screenshots | grim + slurp + Satty | Fast full-screen capture remains direct; selected regions can enter a touch-friendly annotation flow |
 
 The former Rofi, swaylock, and Catppuccin Waybar files were removed because
 they represented an older X11/wlroots setup and a different visual system.
@@ -90,6 +91,7 @@ override rather than changing the global fallback back to `auto`.
 | --- | --- |
 | `Super+Return` | Open Kitty |
 | `Super+Space` | Toggle application launcher |
+| `Super+.` | Search emoji with rofimoji/Fuzzel and copy the selection |
 | `Super+V` | Choose clipboard history entry |
 | `Super+Shift+V` | Wipe clipboard history |
 | `Super+L` | Lock session |
@@ -99,7 +101,7 @@ override rather than changing the global fallback back to `auto`.
 | `Super+1..0` | Select workspace 1..10 |
 | `Super+Shift+1..0` | Move window to workspace 1..10 |
 | `Print` | Save and copy a full screenshot |
-| `Shift+Print` | Select, save, and copy a region |
+| `Shift+Print` | Select a region and annotate it in Satty |
 | `Super+Shift+E` | Exit Hyprland to the console |
 
 Three-finger horizontal touchpad gestures move between workspaces. The laptop
