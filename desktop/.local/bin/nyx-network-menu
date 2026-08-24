@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+set -u
+
+wifi_dev="$(
+  nmcli -t -f DEVICE,TYPE device status \
+    | awk -F: '$2 == "wifi" { print $1; exit }'
+)"
+
+if [[ -z "${wifi_dev:-}" ]]; then
+    notify-send "Network" "No Wi-Fi device found"
+    exit 1
+fi
+
+# Refresh nearby access points before building the menu.
+nmcli device wifi rescan ifname "$wifi_dev" >/dev/null 2>&1 || true
+sleep 1
+
+active_ssid="$(
+  nmcli -t -f ACTIVE,SSID device wifi list ifname "$wifi_dev" \
+    | awk -F: '$1 == "yes" { print $2; exit }'
+)"
+
+declare -A saved_ssids
+
+while IFS= read -r profile; do
+    [[ -z "$profile" ]] && continue
+
+    ssid="$(
+      nmcli -g 802-11-wireless.ssid connection show "$profile" 2>/dev/null
+    )"
+
+    [[ -n "$ssid" ]] && saved_ssids["$ssid"]="$profile"
+done < <(
+  nmcli -t -f NAME,TYPE connection show \
+    | awk -F: '$2 == "802-11-wireless" { print $1 }'
+)
+
+saved_menu=()
+unknown_menu=()
+declare -A seen
+
+# NetworkManager normally returns access points strongest-first. Keep the first
+# entry for each SSID so duplicate radios/BSSIDs do not clutter the menu.
+while IFS=: read -r in_use ssid security signal; do
+    [[ -z "$ssid" ]] && continue
+    [[ -n "${seen[$ssid]+x}" ]] && continue
+    seen["$ssid"]=1
+
+    if [[ "$ssid" == "$active_ssid" ]]; then
+        continue
+    fi
+
+    if [[ -n "${saved_ssids[$ssid]+x}" ]]; then
+        saved_menu+=("󰤨  ${ssid}  [saved]")
+    elif [[ -z "$security" || "$security" == "--" ]]; then
+        unknown_menu+=("󰤨  ${ssid}  [open]")
+    else
+        unknown_menu+=("󰤨  ${ssid}  [secured]")
+    fi
+done < <(
+  nmcli -t -f IN-USE,SSID,SECURITY,SIGNAL \
+    device wifi list ifname "$wifi_dev"
+)
+
+menu=()
+
+if [[ -n "${active_ssid:-}" ]]; then
+    menu+=("󰤨  ${active_ssid}  [connected]")
+fi
+
+menu+=("${saved_menu[@]}")
+
+if [[ -n "${active_ssid:-}" ]]; then
+    menu+=("󰖪  Disconnect from ${active_ssid}")
+fi
+
+menu+=("󰒓  Network settings")
+
+if (( ${#unknown_menu[@]} > 0 )); then
+    menu+=("──────── Nearby networks ────────")
+    menu+=("${unknown_menu[@]}")
+fi
+
+choice="$(
+  printf '%s\n' "${menu[@]}" \
+    | fuzzel --dmenu --prompt="Wi-Fi  "
+)" || exit 0
+
+case "$choice" in
+    "──────── Nearby networks ────────")
+        exit 0
+        ;;
+
+    "󰤨  "*"[connected]")
+        exit 0
+        ;;
+
+    "󰤨  "*"[saved]")
+        ssid="${choice#󰤨  }"
+        ssid="${ssid%  [saved]}"
+        nmcli connection up id "${saved_ssids[$ssid]}"
+        ;;
+
+    "󰖪  Disconnect from "*)
+        nmcli device disconnect "$wifi_dev"
+        ;;
+
+    "󰒓  Network settings")
+        nm-connection-editor
+        ;;
+
+    "󰤨  "*"[open]")
+        ssid="${choice#󰤨  }"
+        ssid="${ssid%  [open]}"
+
+        if nmcli device wifi connect "$ssid" ifname "$wifi_dev"; then
+            notify-send "Wi-Fi" "Connected to ${ssid}"
+        else
+            notify-send "Wi-Fi" "Could not connect to ${ssid}"
+        fi
+        ;;
+
+    "󰤨  "*"[secured]")
+        ssid="${choice#󰤨  }"
+        ssid="${ssid%  [secured]}"
+
+        password="$(
+          printf '' \
+            | fuzzel --dmenu --password --prompt="Password for ${ssid}  "
+        )" || exit 0
+
+        [[ -z "$password" ]] && exit 0
+
+        if nmcli device wifi connect "$ssid" \
+            password "$password" \
+            ifname "$wifi_dev"; then
+            notify-send "Wi-Fi" "Connected to ${ssid}"
+        else
+            notify-send "Wi-Fi" "Could not connect to ${ssid}"
+        fi
+
+        unset password
+        ;;
+esac

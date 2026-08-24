@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+PROFILE="wg-home-trusted"
+
+if nmcli -t -f NAME connection show --active | grep -Fxq "$PROFILE"; then
+    printf '{"text":"󰖂","tooltip":"Home VPN: connected","class":"connected"}\n'
+else
+    printf '{"text":"󰖂","tooltip":"Home VPN: disconnected","class":"disconnected"}\n'
+fi

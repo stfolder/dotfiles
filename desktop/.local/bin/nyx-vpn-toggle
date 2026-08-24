@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+PROFILE="wg-home-trusted"
+
+if nmcli -t -f NAME connection show --active | grep -Fxq "$PROFILE"; then
+    nmcli connection down "$PROFILE"
+else
+    nmcli connection up "$PROFILE"
+fi
