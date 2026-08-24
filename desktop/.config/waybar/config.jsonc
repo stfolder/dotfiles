@@ -90,7 +90,8 @@
     "format": "{icon} {volume}%",
     "format-muted": "󰝟 muted",
     "format-icons": ["󰕿", "󰖀", "󰕾"],
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click": "nyx-audio-menu",
+    "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "on-click-right": "hyprpwcenter",
     "scroll-step": 5
   },
