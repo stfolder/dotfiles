@@ -52,6 +52,7 @@ tooltip label {
 #wireplumber,
 #backlight,
 #network,
+#custom-vpn,
 #bluetooth,
 #battery,
 #tray,
@@ -130,6 +131,14 @@ tooltip label {
   color: @cyan;
 }
 
+#custom-vpn.connected {
+  color: @violet;
+}
+
+#custom-vpn.disconnected {
+  color: @muted;
+}
+
 #bluetooth {
   color: @blue;
 }
@@ -164,6 +173,7 @@ tooltip label {
 #wireplumber:hover,
 #backlight:hover,
 #network:hover,
+#custom-vpn:hover,
 #bluetooth:hover,
 #battery:hover,
 #custom-power:hover {
