@@ -19,6 +19,7 @@
     "wireplumber",
     "backlight",
     "network",
+    "custom/vpn",
     "bluetooth",
     "battery",
     "tray",
@@ -107,7 +108,17 @@
     "tooltip-format-wifi": "{essid}\nSignal {signalStrength}%  ·  {ipaddr}",
     "tooltip-format-ethernet": "{ifname}  ·  {ipaddr}",
     "tooltip-format-disconnected": "Network disconnected",
-    "on-click": "nm-connection-editor"
+    "on-click": "nyx-network-menu",
+    "on-click-right": "nm-connection-editor"
+  },
+
+  "custom/vpn": {
+    "return-type": "json",
+    "exec": "nyx-vpn-status",
+    "interval": 2,
+    "on-click": "nyx-vpn-toggle",
+    "on-click-right": "nm-connection-editor",
+    "tooltip": true
   },
 
   "bluetooth": {
