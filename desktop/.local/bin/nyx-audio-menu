@@ -1,0 +1,182 @@
+#!/usr/bin/env bash
+set -u
+
+command -v wpctl >/dev/null 2>&1 || {
+    notify-send "Audio" "wpctl is not available"
+    exit 1
+}
+
+command -v fuzzel >/dev/null 2>&1 || {
+    notify-send "Audio" "Fuzzel is not available"
+    exit 1
+}
+
+default_sink="$(
+    wpctl inspect @DEFAULT_AUDIO_SINK@ 2>/dev/null \
+        | awk 'NR == 1 { gsub(",", "", $2); print $2 }'
+)"
+
+default_source="$(
+    wpctl inspect @DEFAULT_AUDIO_SOURCE@ 2>/dev/null \
+        | awk 'NR == 1 { gsub(",", "", $2); print $2 }'
+)"
+
+mapfile -t candidate_ids < <(
+    wpctl status -n \
+        | awk '
+            /^Audio$/ { in_audio = 1; next }
+            /^Video$/ { in_audio = 0 }
+            in_audio && match($0, /[[:space:]*]([0-9]+)\./, m) {
+                print m[1]
+            }
+        ' \
+        | sort -nu
+)
+
+node_ids=()
+node_classes=()
+node_labels=()
+
+declare -A label_count
+
+for id in "${candidate_ids[@]}"; do
+    inspect="$(wpctl inspect "$id" 2>/dev/null)" || continue
+
+    media_class="$(
+        awk -F'"' '/media.class = "/ { print $2; exit }' <<<"$inspect"
+    )"
+
+    case "$media_class" in
+        Audio/Sink|Audio/Source)
+            ;;
+        *)
+            continue
+            ;;
+    esac
+
+    label="$(
+        awk -F'"' '/node.description = "/ { print $2; exit }' <<<"$inspect"
+    )"
+
+    if [[ -z "$label" ]]; then
+        label="$(
+            awk -F'"' '/media.name = "/ { print $2; exit }' <<<"$inspect"
+        )"
+    fi
+
+    if [[ -z "$label" ]]; then
+        label="$(
+            awk -F'"' '/node.nick = "/ { print $2; exit }' <<<"$inspect"
+        )"
+    fi
+
+    if [[ -z "$label" ]]; then
+        label="$(
+            awk -F'"' '/node.name = "/ { print $2; exit }' <<<"$inspect"
+        )"
+    fi
+
+    [[ -z "$label" ]] && label="Audio device"
+
+    node_ids+=("$id")
+    node_classes+=("$media_class")
+    node_labels+=("$label")
+
+    key="${media_class}|${label}"
+    label_count["$key"]=$(( ${label_count["$key"]:-0} + 1 ))
+done
+
+menu=()
+declare -A choice_id
+declare -A choice_label
+declare -A choice_kind
+
+menu+=("──────── Output devices ────────")
+
+for i in "${!node_ids[@]}"; do
+    [[ "${node_classes[$i]}" != "Audio/Sink" ]] && continue
+
+    id="${node_ids[$i]}"
+    label="${node_labels[$i]}"
+    display="$label"
+
+    key="Audio/Sink|${label}"
+    if (( ${label_count["$key"]} > 1 )); then
+        display+="  ·  #${id}"
+    fi
+
+    if [[ "$id" == "$default_sink" ]]; then
+        line="●  󰕾  ${display}"
+    else
+        line="   󰕾  ${display}"
+    fi
+
+    menu+=("$line")
+    choice_id["$line"]="$id"
+    choice_label["$line"]="$label"
+    choice_kind["$line"]="output"
+done
+
+menu+=("")
+menu+=("──────── Input devices ─────────")
+
+for i in "${!node_ids[@]}"; do
+    [[ "${node_classes[$i]}" != "Audio/Source" ]] && continue
+
+    id="${node_ids[$i]}"
+    label="${node_labels[$i]}"
+    display="$label"
+
+    key="Audio/Source|${label}"
+    if (( ${label_count["$key"]} > 1 )); then
+        display+="  ·  #${id}"
+    fi
+
+    if [[ "$id" == "$default_source" ]]; then
+        line="●  󰍬  ${display}"
+    else
+        line="   󰍬  ${display}"
+    fi
+
+    menu+=("$line")
+    choice_id["$line"]="$id"
+    choice_label["$line"]="$label"
+    choice_kind["$line"]="input"
+done
+
+menu+=("")
+menu+=("󰒓  Audio settings")
+
+choice="$(
+    printf '%s\n' "${menu[@]}" \
+        | fuzzel --dmenu --prompt="Audio  "
+)" || exit 0
+
+case "$choice" in
+    "──────── Output devices ────────"|"──────── Input devices ─────────"|"")
+        exit 0
+        ;;
+
+    "󰒓  Audio settings")
+        hyprpwcenter
+        exit 0
+        ;;
+esac
+
+id="${choice_id[$choice]:-}"
+
+[[ -z "$id" ]] && exit 0
+
+if wpctl set-default "$id"; then
+    case "${choice_kind[$choice]}" in
+        output)
+            notify-send "Audio output" "${choice_label[$choice]}"
+            ;;
+        input)
+            notify-send "Audio input" "${choice_label[$choice]}"
+            ;;
+    esac
+else
+    notify-send "Audio" "Could not change audio device"
+    exit 1
+fi
