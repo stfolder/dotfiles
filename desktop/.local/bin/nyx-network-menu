@@ -97,7 +97,7 @@ case "$choice" in
 
     "󰤨  "*"[saved]")
         ssid="${choice#󰤨  }"
-        ssid="${ssid%  [saved]}"
+        ssid="${ssid%  \[saved\]}"
         nmcli connection up id "${saved_ssids[$ssid]}"
         ;;
 
@@ -111,7 +111,7 @@ case "$choice" in
 
     "󰤨  "*"[open]")
         ssid="${choice#󰤨  }"
-        ssid="${ssid%  [open]}"
+        ssid="${ssid%  \[open\]}"
 
         if nmcli device wifi connect "$ssid" ifname "$wifi_dev"; then
             notify-send "Wi-Fi" "Connected to ${ssid}"
@@ -122,7 +122,7 @@ case "$choice" in
 
     "󰤨  "*"[secured]")
         ssid="${choice#󰤨  }"
-        ssid="${ssid%  [secured]}"
+        ssid="${ssid%  \[secured\]}"
 
         password="$(
           printf '' \
